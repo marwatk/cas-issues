@@ -1,0 +1,265 @@
+@charset "utf-8";
+
+/* CSS Document */
+
+
+
+body {	
+	padding: 60px 0 0 0;
+	margin: 0;
+    background-color:#dddddd; 
+	font-size:12px;
+	line-height: 1.27;
+	font-family:Verdana, Arial, Helvetica, sans-serif;
+}
+
+a {
+	color:#000000;
+	text-decoration: underline;
+}
+
+a:hover{
+	text-decoration:none;
+	color: #ae2573;
+}
+
+.displayblock {
+	display:block;
+}
+
+img { 
+	border:0px;  
+	text-decoration: none;
+}	
+
+#conteneur_global {
+	width:870px;
+	margin:0 auto;
+	background-color:#ffffff;
+	border:1px solid #bbbbbb;
+	border-radius:10px;
+	padding: 50px;
+	box-sizing: border-box;
+}
+
+#bandeau_haut{
+overflow:auto;
+}
+#logo{
+float:left;
+width:50%;
+margin-bottom:30px;
+}
+#logo-connexion{
+box-sizing:border-box;
+float:left;
+width:50%;
+padding-top:55px;
+padding-left:50px;
+}
+#logo-connexion h1{
+color:#ae2573;
+font-weight:normal;
+padding-left:12px;
+}
+
+#contenu_principal {
+	overflow:auto;
+}
+
+#bienvenue, #colonne_droite{
+	box-sizing: border-box;
+	width:50%;
+	float:left;
+}
+
+#bienvenue {
+	padding-right:50px;
+}
+
+#bienvenue h1{
+	margin:0;
+	padding:0;
+	color:#000000;
+	font-size:20px;
+	font-weight:normal;
+}
+
+#bienvenue p{
+	margin-top:25px;
+	color:#000000;
+	text-align:justify;
+}
+
+#colonne_droite{
+	padding:7px 0 0 50px;
+	background-image:url(images/liserblanc.jpg);
+	background-repeat: no-repeat;
+}
+
+#zone_formulaire {
+	border: 3px solid #ae2573;
+	border-radius:10px;
+	background-color:#ae2573;
+	position:relative;
+	padding:0px 18px 10px 14px;
+}
+
+#zone_formulaire:after {
+    border-left: 7px solid #ffffff;
+    border-right: 7px solid #ffffff;
+    border-bottom: 7px solid #ae2573;
+    top: -10px;
+    height: 0;
+    content: no-close-quote;
+    left: 12px;
+    position: absolute;
+    width: 0;
+}
+
+#status,
+#zone_ok { 
+	margin-top: 10px;
+	color:#ffffff;
+	font-size:14px;
+  text-align:justify;
+}
+
+#zone_probleme h2{
+	margin:0;
+	padding:0;
+	padding-top:15px;
+	color:#000000;
+	font-size:16px;
+	font-weight:normal;
+}
+
+#zone_probleme p{
+	margin:0;
+	padding:0;
+  padding-bottom:10px;
+	color:#000000;
+	text-align:justify;
+}
+
+#securite{
+	margin-top:40px;
+	color:#666666;
+	font-size:11px;
+	text-align:justify;
+  clear: both;
+}
+
+#copyright{
+	margin-top:5px;
+	color:#000000;
+	font-size:10px;
+}
+
+#copyright a{
+	text-decoration:none;
+}
+
+form{
+	color:#ffffff;
+	font-size:13px;
+	text-align:right;
+}
+
+.bordure{
+	margin:16px 0px 0px 0px;
+	padding:0px 0 0 2px;
+	border: 1px #666666 solid;
+	width:187px;
+	height:25px;
+	border-radius: 5px;
+}
+
+.envoi{
+	background-image:url(images/bouton04.jpg);
+	background-repeat:no-repeat;
+	border:medium none;
+	height:20px;
+	cursor: pointer;
+	margin:16px 0px 0px 0px;
+	width:72px;
+}
+
+input[type=submit]:hover, input[type=reset]:hover {
+	background-image:url(images/bouton04_hover.jpg);
+}
+
+label{
+	text-align:right;
+}
+
+@media screen and (max-width: 900px) {
+	#securite, #bienvenue, #copyright {
+		display: none;
+	}
+	
+	#conteneur_global {
+		width: 100%;
+	}
+	
+	body {
+		padding:10px;
+	}
+	
+	#colonne_droite {
+		background: none;
+		width:100%;
+		padding: 7px 0 0 0;
+	}
+	
+	#zone_formulaire {
+		width:300px;
+		margin: 0 auto;
+	}
+	#zone_formulaire:after {
+    display: none;
+  }
+  
+	#zone_probleme {
+		width:335px;
+		margin: 0 auto;
+	}
+	
+	#logo, #logo-connexion {
+		float:none;
+		width:auto;
+		text-align: center;
+		margin:0;
+		padding:0;
+	}
+	
+}
+
+@media screen and (max-width: 468px) {
+	#conteneur_global {
+		padding:10px;
+	}
+	
+	#zone_formulaire {
+		width: 100%;
+		box-sizing: border-box;
+	}
+
+			
+	#zone_probleme {
+		width: auto;
+	}
+	
+	label {
+		display: block;
+		text-align: left;
+		margin-top: 5px;
+	}
+	
+	.bordure {
+		width: 100%;
+    margin: 6px 0 0;
+    border: none;
+    }	
+
+}
