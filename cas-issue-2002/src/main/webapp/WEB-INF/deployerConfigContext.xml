@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+| deployerConfigContext.xml centralizes into one file some of the declarative configuration that
+| all CAS deployers will need to modify.
+|
+| This file declares some of the Spring-managed JavaBeans that make up a CAS deployment.
+| The beans declared in this file are instantiated at context initialization time by the Spring
+| ContextLoaderListener declared in web.xml.  It finds this file because this
+| file is among those declared in the context parameter "contextConfigLocation".
+|
+| By far the most common change you will need to make in this file is to change the last bean
+| declaration to replace the default authentication handler with
+| one implementing your approach for authenticating usernames and passwords.
++-->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:c="http://www.springframework.org/schema/c"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:sec="http://www.springframework.org/schema/security"
+       xmlns:ldaptive="http://www.ldaptive.org/schema/spring-ext"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+       http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+       http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd
+       http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd
+       http://www.ldaptive.org/schema/spring-ext
+       http://www.ldaptive.org/schema/spring-ext.xsd">
+
+
+    <util:map id="authenticationHandlersResolvers">
+        <entry key-ref="proxyAuthenticationHandler" value-ref="proxyPrincipalResolver" />
+        <entry key-ref="ldapAuthenticationHandler" value="#{null}" />
+    </util:map>
+
+    <util:list id="authenticationMetadataPopulators">
+        <ref bean="successfulHandlerMetaDataPopulator" />
+        <ref bean="rememberMeAuthenticationMetaDataPopulator" />
+    </util:list>
+
+
+    <alias name="ldapAuthenticationHandler" alias="personDirectoryPrincipalResolver" />
+    <alias name="ldapPasswordPolicyConfiguration" alias="passwordPolicyConfiguration" />
+    
+
+    <bean id="ldapAuthenticationHandler"
+          class="org.jasig.cas.authentication.LdapAuthenticationHandler"
+          p:principalIdAttribute="wiuAlias"
+          p:passwordPolicyConfiguration-ref="passwordPolicyConfiguration"
+          c:authenticator-ref="authenticator">
+        <property name="principalAttributeMap">
+            <map>
+                <!--
+                   | This map provides a simple attribute resolution mechanism.
+                   | Keys are LDAP attribute names, values are CAS attribute names.
+                   | Use this facility instead of a PrincipalResolver if LDAP is
+                   | the only attribute source.
+                   -->
+                <entry key="uid" value="ecomuid" />
+                <entry key="wiuAlias" value="wiualias" />
+                <entry key="wiuid" value="wiuid" />
+                <entry key="givenName" value="givenname" />
+                <entry key="sn" value="sn" />
+                <entry key="cn" value="cn" />
+                <entry key="mail" value="mail" />
+                <entry key="wiuregisteredstar" value="wiuregisteredstar" />
+                <entry key="objectClass" value="objectclass" />
+            </map>
+        </property>
+    </bean>
+
+    <ldaptive:bind-search-authenticator id="authenticator"
+        ldapUrl="${ldap.url}"
+        baseDn="${ldap.baseDn}"
+        userFilter="${ldap.authn.searchFilter}"
+        bindDn="${ldap.managerDn}"
+        bindCredential="${ldap.managerPassword}"
+        connectTimeout="${ldap.connectTimeout}"
+        useStartTLS="${ldap.useStartTLS}"
+        blockWaitTime="${ldap.pool.blockWaitTime}"
+        maxPoolSize="${ldap.pool.maxSize}"
+        allowMultipleDns="${ldap.allowMultipleDns:false}"
+        usePasswordPolicy="${ldap.usePpolicy:true}"
+        minPoolSize="${ldap.pool.minSize}"
+        validateOnCheckOut="${ldap.pool.validateOnCheckout}"
+        validatePeriodically="${ldap.pool.validatePeriodically}"
+        validatePeriod="${ldap.pool.validatePeriod}"
+        idleTime="${ldap.pool.idleTime}"
+        prunePeriod="${ldap.pool.prunePeriod}"
+        failFastInitialize="true"
+        subtreeSearch="${ldap.subtree.search:true}"
+        useSSL="${ldap.use.ssl:false}"
+    />
+
+    <alias name="serviceThemeResolver" alias="themeResolver" />
+
+    <alias name="jsonServiceRegistryDao" alias="serviceRegistryDao" />
+
+    <alias name="defaultTicketRegistry" alias="ticketRegistry" />
+
+    <alias name="ticketGrantingTicketExpirationPolicy" alias="grantingTicketExpirationPolicy" />
+    <alias name="multiTimeUseOrTimeoutExpirationPolicy" alias="serviceTicketExpirationPolicy" />
+
+    <alias name="anyAuthenticationPolicy" alias="authenticationPolicy" />
+    <alias name="acceptAnyAuthenticationPolicyFactory" alias="authenticationPolicyFactory" />
+
+    <bean id="auditTrailManager"
+          class="org.jasig.inspektr.audit.support.Slf4jLoggingAuditTrailManager"
+          p:entrySeparator="${cas.audit.singleline.separator:|}"
+          p:useSingleLine="${cas.audit.singleline:false}"/>
+
+    <alias name="neverThrottle" alias="authenticationThrottle" />
+
+    <util:list id="monitorsList">
+        <ref bean="memoryMonitor" />
+        <ref bean="sessionMonitor" />
+    </util:list>
+
+    <alias name="defaultPrincipalFactory" alias="principalFactory" />
+    <alias name="defaultAuthenticationTransactionManager" alias="authenticationTransactionManager" />
+    <alias name="defaultPrincipalElectionStrategy" alias="principalElectionStrategy" />
+    <alias name="tgcCipherExecutor" alias="defaultCookieCipherExecutor" />
+</beans>

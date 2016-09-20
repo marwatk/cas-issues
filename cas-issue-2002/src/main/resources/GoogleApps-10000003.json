@@ -1,0 +1,27 @@
+{
+  "@class" : "org.jasig.cas.services.RegexRegisteredService",
+  "serviceId" : "https://www\\.google\\.com/a/${google.domain}/acs",
+  "name" : "Google Apps Service",
+  "id" : 10000003,
+  "description" : "Service to authorize Google Apps SSO ",
+  "proxyPolicy" : {
+    "@class" : "org.jasig.cas.services.RefuseRegisteredServiceProxyPolicy"
+  },
+  "evaluationOrder" : 10,
+  "usernameAttributeProvider" : {
+    "@class" : "org.jasig.cas.services.PrincipalAttributeRegisteredServiceUsernameProvider",
+    "usernameAttribute" : "mail"
+  },
+  "logoutType" : "BACK_CHANNEL",
+  "attributeReleasePolicy" : {
+    "@class" : "org.jasig.cas.services.ReturnAllowedAttributeReleasePolicy",
+    "allowedAttributes" : [ "java.util.ArrayList", [ "wiualias", "mail" ] ],
+    "authorizedToReleaseCredentialPassword" : false,
+    "authorizedToReleaseProxyGrantingTicket" : false
+  },
+  "accessStrategy" : {
+    "@class" : "org.jasig.cas.services.DefaultRegisteredServiceAccessStrategy",
+    "enabled" : true,
+    "ssoEnabled" : true
+  }
+}
