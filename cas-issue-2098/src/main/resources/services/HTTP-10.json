@@ -1,0 +1,18 @@
+{
+  "@class" : "org.jasig.cas.services.RegexRegisteredService",
+  "serviceId" : "^(http)://.*",
+  "name" : "HTTP",
+  "id" : 10,
+  "evaluationOrder": 10,
+  "description" : "HTTP url",
+  "accessStrategy" : {
+    "@class" : "org.jasig.cas.services.DefaultRegisteredServiceAccessStrategy",
+    "enabled" : true,
+    "ssoEnabled" : true,
+    "unauthorizedRedirectUrl" : "https://www.github.com",
+    "requiredAttributes" : {
+      "@class" : "java.util.HashMap",
+      "AttributeDoesntExist" : [ "java.util.HashSet", [ ".*" ] ]
+    }
+  }
+}
