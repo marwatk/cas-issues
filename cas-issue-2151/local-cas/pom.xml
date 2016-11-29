@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd ">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.jasig.cas</groupId>
+        <artifactId>work</artifactId>
+        <version>1.4-SNAPSHOT</version>
+    </parent>
+    <artifactId>local-cas</artifactId>
+    <packaging>war</packaging>
+    <name>CAS Web Application</name>
+    <description>CAS Web Application</description>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>com.rimerosolutions.maven.plugins</groupId>
+          	<artifactId>wrapper-maven-plugin</artifactId>
+          	<version>${maven.wrapper.plugin.version}</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>${maven.war.plugin.version}</version>
+                <configuration>
+                    <warName>${cas.war.name}</warName>
+                    <overlays>
+                        <overlay>
+                            <groupId>org.jasig.cas</groupId>
+                            <artifactId>cas-server-webapp</artifactId>
+                            <excludes>
+                                <exclude>WEB-INF/cas.properties</exclude>
+                                <exclude>WEB-INF/classes/log4j2.xml</exclude>
+                            </excludes>
+                        </overlay>
+                    </overlays>
+                </configuration>
+            </plugin>
+            <plugin>
+                 <groupId>org.apache.maven.plugins</groupId>
+                 <artifactId>maven-compiler-plugin</artifactId>
+                 <version>${maven.version}</version>
+                    <configuration>
+                       <source>${java.source.version}</source>
+                       <target>${java.target.version}</target>
+                    </configuration>
+            </plugin>
+        </plugins>
+       <finalName>${cas.war.name}</finalName>
+    </build>
+
+    <dependencies>
+        <!-- core product, webapp sans admin interface, which is a separate war  -->
+        <dependency>
+            <groupId>org.jasig.cas</groupId>
+            <artifactId>cas-server-webapp</artifactId>
+            <version>${cas.version}</version>
+            <type>war</type>
+            <scope>runtime</scope>
+        </dependency>
+        <!-- -->
+        <!-- JPA (DB) Ticket Registry storage -->
+        <dependency>
+            <groupId>org.jasig.cas</groupId>
+            <artifactId>cas-server-support-jpa-ticket-registry</artifactId>
+            <version>${cas.version}</version>
+        </dependency>
+
+    </dependencies>
+
+</project>
