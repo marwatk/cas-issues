@@ -1,0 +1,69 @@
+<ehcache name="ticketRegistryCacheManager" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="http://enchache.org/ehcache.xsd"
+         updateCheck="true" monitoring="autodetect"
+         dynamicConfig="true"> 
+
+    <diskStore path="java.io.tmpdir/cas1"/> 
+
+    <transactionManagerLookup class="net.sf.ehcache.transaction.manager.DefaultTransactionManagerLookup"
+                              properties="jndiName=java:/TransactionManager" propertySeparator=";"/> 
+    
+   <cacheManagerPeerProviderFactory
+      class="net.sf.ehcache.distribution.RMICacheManagerPeerProviderFactory"
+      properties="peerDiscovery=manual,rmiUrls=//localhost:41002/cas_st|//localhost:41001/cas_st|//localhost:41002/cas_tgt|//localhost:41001/cas_tgt" />
+	  
+    <cacheManagerPeerListenerFactory class="net.sf.ehcache.distribution.RMICacheManagerPeerListenerFactory"
+                                     properties="hostName=localhost, port=41001, socketTimeoutMillis="/> 
+     <defaultCache
+            maxElementsInMemory="10000"
+            eternal="false"
+            timeToIdleSeconds="120"
+            timeToLiveSeconds="120"
+            overflowToDisk="true"
+            diskSpoolBufferSizeMB="30"
+            maxElementsOnDisk="10000000"
+            diskPersistent="false"
+            diskExpiryThreadIntervalSeconds="120"
+            memoryStoreEvictionPolicy="LRU"
+            statistics="true"
+			
+            />
+
+    <cache name="replicatedCache"
+    maxElementsInMemory="5"
+           maxElementsOnDisk="100000"
+           eternal="true"
+           overflowToDisk="true"
+           diskPersistent="true"
+           diskSpoolBufferSizeMB="20"
+           timeToIdleSeconds="3600"
+           timeToLiveSeconds="3600"
+           memoryStoreEvictionPolicy="LFU"
+           transactionalMode="off">
+        <cacheEventListenerFactory
+                class="net.sf.ehcache.distribution.RMICacheReplicatorFactory"/>
+        <bootstrapCacheLoaderFactory
+        class="net.sf.ehcache.distribution.RMIBootstrapCacheLoaderFactory"
+        properties="bootstrapAsynchronously=true, maximumChunkSizeBytes=5000000"
+        propertySeparator="," />
+    </cache>   
+
+    <cache name="replicatedCache2"
+    maxElementsInMemory="5"
+           maxElementsOnDisk="100000"
+           eternal="true"
+           overflowToDisk="true"
+           diskPersistent="true"
+           diskSpoolBufferSizeMB="20"
+           timeToIdleSeconds="3600"
+           timeToLiveSeconds="3600"
+           memoryStoreEvictionPolicy="LFU"
+           transactionalMode="off">
+        <cacheEventListenerFactory
+                class="net.sf.ehcache.distribution.RMICacheReplicatorFactory"/>
+        <bootstrapCacheLoaderFactory
+        class="net.sf.ehcache.distribution.RMIBootstrapCacheLoaderFactory"
+        properties="bootstrapAsynchronously=true, maximumChunkSizeBytes=5000000"
+        propertySeparator="," />
+    </cache>   
+</ehcache> 
