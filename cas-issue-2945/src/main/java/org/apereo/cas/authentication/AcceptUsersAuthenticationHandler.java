@@ -1,6 +1,7 @@
 package org.apereo.cas.authentication;
 
 import org.apache.commons.codec.binary.StringUtils;
+import org.apereo.cas.authentication.exceptions.AccountDisabledException;
 import org.apereo.cas.authentication.exceptions.AccountPasswordMustChangeException;
 import org.apereo.cas.authentication.handler.support.AbstractUsernamePasswordAuthenticationHandler;
 import org.apereo.cas.authentication.principal.PrincipalFactory;
@@ -8,7 +9,11 @@ import org.apereo.cas.services.ServicesManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+
+import javax.security.auth.login.AccountExpiredException;
+import javax.security.auth.login.AccountLockedException;
 import javax.security.auth.login.AccountNotFoundException;
+import javax.security.auth.login.CredentialExpiredException;
 import javax.security.auth.login.FailedLoginException;
 import java.security.GeneralSecurityException;
 import java.util.ArrayList;
@@ -67,8 +72,21 @@ public class AcceptUsersAuthenticationHandler extends AbstractUsernamePasswordAu
     protected HandlerResult authenticateUsernamePasswordInternal(final UsernamePasswordCredential credential,
                                                                  final String originalPassword)
             throws GeneralSecurityException, PreventedException {
-        LOGGER.error( "TEST_CLASS throwing AccountPasswordMustChangeException" );
-        throw new AccountPasswordMustChangeException();
+        GeneralSecurityException e;
+        if( "disabled".equals( credential.getUsername() ) ) {
+            e = new AccountDisabledException();
+        }
+        else if( "expired".equals( credential.getUsername() ) ) {
+            e = new CredentialExpiredException();
+        }
+        else if( "locked".equals( credential.getUsername() ) ) {
+            e = new AccountLockedException();
+        }
+        else {
+            e = new AccountPasswordMustChangeException();
+        }
+        LOGGER.error( "Throwing {}", e );
+        throw e;
     }
 
     /**
